@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)http://127.0.0.1:5220/shinyapp_iris.Rmd -->
+<html class=""><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  
+  <script type="application/shiny-singletons"></script>
+  <script type="application/html-dependencies">json2[2014.02.04];jquery[3.4.1];shiny[1.4.0]</script>
+<script src="./ShinyApp_Iris_files/json2-min.js.download"></script>
+<script src="./ShinyApp_Iris_files/jquery.min.js.download"></script>
+<link href="./ShinyApp_Iris_files/shiny.css" rel="stylesheet">
+<script src="./ShinyApp_Iris_files/shiny.min.js.download"></script>  <script src="./ShinyApp_Iris_files/rmd_loader.js.download"></script>
+  <link href="./ShinyApp_Iris_files/rmd_loader.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="./ShinyApp_Iris_files/bootstrap.min.css"><script src="./ShinyApp_Iris_files/bootstrap.min.js.download"></script><script src="./ShinyApp_Iris_files/html5shiv.min.js.download"></script><script src="./ShinyApp_Iris_files/respond.min.js.download"></script><script src="./ShinyApp_Iris_files/tabsets.js.download"></script><link rel="stylesheet" type="text/css" href="./ShinyApp_Iris_files/default.css"><script src="./ShinyApp_Iris_files/highlight.js.download"></script><link rel="stylesheet" type="text/css" href="./ShinyApp_Iris_files/selectize.bootstrap3.css"><script src="./ShinyApp_Iris_files/selectize.min.js.download"></script><link rel="stylesheet" type="text/css" href="./ShinyApp_Iris_files/rmd_perf.css"><script src="./ShinyApp_Iris_files/rmd_perf.js.download"></script><meta name="rstudio_origin" content="127.0.0.1:34267"><script src="./ShinyApp_Iris_files/rsiframe.js.download"></script>
+
+
+
+<meta name="generator" content="pandoc">
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+
+
+<meta name="author" content="Powell Chu">
+
+
+<title>ShinyApp_Iris</title>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type="text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+<script type="text/javascript" src="./ShinyApp_Iris_files/MathJax.js.download"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+<body><div id="MathJax_Message" style="display: none;"></div>
+  <div>
+    <div data-display-if="!output.__reactivedoc__" data-ns-prefix="" style="display: none;">
+      <div id="rmd_loader_wrapper">
+        <div id="rmd_loader" style="">
+          <p>Please wait...</p>
+          <img src="./ShinyApp_Iris_files/rmd_loader.gif">
+        </div>
+      </div>
+    </div>
+    <div id="__reactivedoc__" class="shiny-html-output shiny-bound-output">
+
+
+
+
+
+
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="fluid-row" id="section-header">
+
+
+
+<h1 class="title toc-ignore">ShinyApp_Iris</h1>
+<h4 class="author">Powell Chu</h4>
+<h4 class="date">1/24/2021</h4>
+
+</div>
+
+
+<p>This R Markdown document is made interactive using Shiny. Unlike the more traditional workflow of creating static reports, you can now create documents that allow your readers to change the assumptions underlying your analysis and see the results immediately.</p>
+<p>To learn more, see <a href="http://rmarkdown.rstudio.com/authoring_shiny.html">Interactive Documents</a>.</p>
+<div id="section-inputs-and-outputs" class="section level2">
+<h2>Inputs and Outputs</h2>
+<p>You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change. This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny <code>renderPlot</code> function. The <code>selectInput</code> and <code>sliderInput</code> functions create the input widgets used to drive the plot.</p>
+<p></p><div class="form-group shiny-input-container">
+<label class="control-label" for="dataset2-selectized">Choose Dataset:</label>
+<div>
+<select id="dataset2" tabindex="-1" class="selectized shiny-bound-input" style="display: none;"><option value="cars" selected="selected">cars</option></select><div class="selectize-control single"><div class="selectize-input items full has-options has-items"><div class="item" data-value="cars">cars</div><input type="text" autocomplete="off" tabindex="" id="dataset2-selectized" style="width: 4px;"></div><div class="selectize-dropdown single" style="display: none;"><div class="selectize-dropdown-content"></div></div></div>
+<script type="application/json" data-for="dataset2" data-nonempty="">{}</script>
+</div>
+</div><div id="out972de07bc96a3a11" class="shiny-plot-output shiny-bound-output" style="width: 100% ; height: 400px"><img src="data:image/png;base64,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" width="940" height="400"></div><p></p>
+<p>Note the use of the <code>height</code> parameter to determine how much vertical space the embedded application should occupy.</p>
+<p>You can also use the <code>shinyApp</code> function to define an application inline rather then in an external directory.</p>
+<p>In all of R code chunks above the <code>echo = FALSE</code> attribute is used. This is to prevent the R code within the chunk from rendering in the document alongside the Shiny components.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("section-TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+
+</div>
+  </div>
+
+
+
+</body></html>
