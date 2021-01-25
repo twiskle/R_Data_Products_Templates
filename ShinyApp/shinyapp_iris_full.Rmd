@@ -1,0 +1,318 @@
+---
+title       : ShinyApp_Iris
+subtitle    : Coursera Data Products Project
+author      : Powell Chu
+date        : January/25/2021
+output      : slidy_presentation
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow
+runtime     : shiny
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Iris Dataset Histogram
+
+```{r histogram, warning = F, message = F, echo=F}
+library(shiny)
+library(ggplot2)
+data(iris)
+
+sidebarLayout(
+    sidebarPanel(
+        #histogram
+        sliderInput("bins",
+                    "Number of bins:",
+                    min = 1,
+                    max = 50,
+                    value = 30),
+        
+        
+        selectInput("category", "Choose a variable:",
+                    setNames(1:4, names(iris)[1:4])
+        ),
+        
+        width = 3
+        
+    ),
+
+    # Show a plot of the generated distribution
+    mainPanel(
+        plotOutput("distPlot"), 
+        
+        width = 7
+    )
+)
+output$distPlot <- renderPlot({
+
+    # generate bins based on input$bins from ui.R
+    ind <- as.numeric(input$category)
+    x    <- iris[, ind]
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+
+    ggplot(iris[, c(ind,5)], 
+           aes(x=get(names(iris)[ind]), fill=Species)) +
+        geom_histogram(stat = "bin", bins = input$bins) +
+        xlab('# of bins')
+
+})
+```
+
+## Model1: Linear Model
+
+```{r lm1, warning = F, message = F, echo=F}
+library(shiny)
+library(ggplot2)
+data(iris)
+
+sidebarLayout(
+    sidebarPanel(
+        selectInput("species", "Choose a species:",
+                    setNames(1:length(unique(iris$Species)), levels(iris$Species))
+        ),
+
+        sliderInput("sliderSepalLength", "What is the Sepal Length?", 0, 10, step=0.5, value=5),            
+        
+        sliderInput("xlim",
+                    "Selext xlim values:",
+                    min = 0,
+                    max = 10,
+                    value = c(3,7)),
+        
+        sliderInput("ylim",
+                    "Selext ylim values:",
+                    min = 0,
+                    max = 10,
+                    value = c(2,5)),
+
+        checkboxInput("showModel1", "Show/Hide Model 1", value = TRUE),
+        
+
+        width = 3
+    ),
+
+    # Show a plot of the generated distribution
+    mainPanel(
+        # dataTableOutput('table2'), width = 6
+        plotOutput("plot2"),
+        
+        h3("Predicted Sepal Width from Model 1:"),
+        textOutput("pred1"), 
+        
+        width = 7
+    )
+)
+
+selectX <- reactive ({
+    ind <- as.numeric(input$species)
+    subset(iris, Species == levels(iris$Species)[ind])[["Sepal.Length"]]
+})
+selectY <- reactive ({
+    ind <- as.numeric(input$species)
+    subset(iris, Species == levels(iris$Species)[ind])[["Sepal.Width"]]
+})
+model1 <- reactive({
+    lm(y ~ x, data=data.frame(x = selectX(), y = selectY()))
+})
+model1pred <- reactive({
+    predict(model1(), newdata = data.frame(x = input$sliderSepalLength))
+})
+
+output$plot2 <- renderPlot({
+    plot(selectX(), selectY(),
+         xlab = "Sepal Length",
+         ylab = "Sepal Width",
+         bty = "n", pch = 16,
+         xlim = c(input$xlim[1], input$xlim[2]), 
+         ylim = c(input$ylim[1], input$ylim[2]))
+    
+    #linear model
+    if (input$showModel1) {
+        sliderSepalLength <- input$sliderSepalLength
+
+        model1lines <- predict(model1(), newdata = data.frame(x = input$xlim[1]:input$xlim[2]))
+
+        lines(input$xlim[1]:input$xlim[2], model1lines, col = 'blue', lwd = 2)
+        legend(25, 350, c("Model 1 Prediction"), pch = 16, col = c("blue"), bty = "n", cex = 2)
+        points(sliderSepalLength, model1pred(), col = "blue", pch = 16, cex = 2)
+    }
+})
+
+output$pred1 <- renderText({
+    model1pred()
+})
+```
+
+## Model2: Linear Model (with Brushing)
+
+```{r lm2, warning = F, message = F, echo=F}
+library(shiny)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+data(iris)
+
+sidebarLayout(
+    sidebarPanel(
+        selectInput("xVar", "Choose a variable for x-axis:",
+                    choices = setNames(1:4, names(iris)[1:4]), selected = 1,
+        ),
+        selectInput("yVar", "Choose a variable for y-axis:",
+                    choices = setNames(1:4, names(iris)[1:4]), selected = 2,
+        ),
+        
+        #brush parameter in plot
+        h3("Slope"),
+        textOutput("slopeOut"),
+        h3("Intercept"),
+        textOutput("intOut"),
+        
+
+        width = 3
+    ),
+
+    # Show a plot of the generated distribution
+    mainPanel(
+        plotOutput("scatterPlot1", brush = brushOpts(id = "brush1")), 
+        
+        width = 7
+    )
+)
+
+selectData <- function(indX, indY, data = iris) {
+    temp <- data[, names(data)[c(indX, indY, 5)]]
+    names(temp) <- c("x","y","c")
+    return (temp)
+}
+
+selectVars <- reactive ({
+    indX <- as.numeric(input$xVar)
+    indY <- as.numeric(input$yVar)
+    selectData(indX, indY)
+})
+
+# model2 <- reactive({
+#     lm(y ~ x, data=selectVars())
+# })
+
+# Usage of `brush`
+model2 <- reactive({
+    brushed_data <- brushedPoints(selectVars(), input$brush1,
+                                  xvar = "x", yvar = "y")
+    if (nrow(brushed_data) < 2){
+        return(NULL)
+    }
+    lm(y ~ x, data = brushed_data)
+})
+
+output$scatterPlot1 <- renderPlot({
+    
+    p <- selectVars() %>% ggplot(aes(x = x, 
+                                y = y,
+                                col = c)) + 
+        geom_point() +
+        theme(legend.title = element_blank())
+    
+    #linear model
+    if (!is.null(model2())) {
+        # if() {
+        #     abline(model2(), col = "blue", lwd = 2)
+        # }
+
+        model2lines <- predict(model2(), newdata = data.frame(x = 0:10))
+        output_df <- data.frame(x = 0:10,
+                                y = model2lines,
+                                c = 'linear model')
+        p <- p + geom_line(data = output_df, aes(x = x, y = y, col = c))
+        
+        #legend(25, 350, c("Model 1 Prediction"), pch = 16, col = c("blue"), bty = "n", cex = 2)
+        #points(sliderSepalLength, model1pred(), col = "blue", pch = 16, cex = 2)
+    }
+    p
+})
+
+output$slopeOut <- renderText({
+    if(is.null(model2())) {
+        "No Model Found"
+    } else {
+        model2()[[1]][2]
+    }
+})
+output$intOut <- renderText({
+    if(is.null(model2())) {
+        "No Model Found"
+    } else {
+        model2()[[1]][1]
+    }
+})
+
+```
+
+## Model3: Kmeans Clustering
+
+```{r kmeanscluster, warning = F, message = F, echo=F}
+library(shiny)
+library(cluster)
+library(factoextra)
+library(ggplot2)
+data(iris)
+
+sidebarLayout(
+    sidebarPanel(
+        selectInput("xVar", "Choose a variable for x-axis:",
+                    choices = setNames(1:4, names(iris)[1:4]), selected = 1,
+        ),
+        selectInput("yVar", "Choose a variable for y-axis:",
+                    choices = setNames(1:4, names(iris)[1:4]), selected = 2,
+        ),
+        
+        selectInput("num_cluster", "Select the number of clusters",
+                    choices = setNames(1:5, 1:5), selected = 1,
+        ),
+        
+        width = 3
+    ),
+
+    # Show a scatter plot with kmeans clustering
+    mainPanel(
+        plotOutput("scatterPlot2"), 
+        
+        width = 7
+    )
+)
+#function to select input data for display
+selectData <- function(indX, indY, data = iris) {
+    temp <- data[, names(data)[c(indX, indY, 5)]]
+    names(temp) <- c("x","y","c")
+    rownames(temp) <- paste0(rownames(temp), ": ", temp[,3])
+    return (temp)
+}
+
+#input dataset
+selectVars <- reactive ({
+    indX <- as.numeric(input$xVar)
+    indY <- as.numeric(input$yVar)
+    selectData(indX, indY)
+})
+
+#create kmeans clustering model
+model3 <- reactive({
+    #lm(y ~ x, data=selectVars())
+    set.seed(123)
+    #k.values <- input$num_cluster
+    kmeans(selectVars()[1:2], as.numeric(input$num_cluster), nstart = 25)
+    
+})
+
+output$scatterPlot2 <- renderPlot({
+
+    #point clusters
+    fviz_cluster(model3(), geom = "text", data = selectVars()[,1:2], alpha = 0)
+})
+```
+
