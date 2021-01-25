@@ -1,0 +1,73 @@
+---
+title: "shinyapp_iris_presentation"
+author: "Powell Chu"
+date: "1/25/2021"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Iris dataset
+
+A summary of the dataset *Iris* is as follows:
+```{r iris, echo=F, message=F, warning=F}
+## Iris dataset
+data("iris")
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(cluster)
+library(factoextra)
+library(ggplot2)
+summary(iris)
+```
+
+## Histogram
+
+Here we illustrate the histogram of the iris dataset on its variable (Sepal Length), separating by Species
+
+```{r hist, echo=F, message=F, warning=F}
+ind <- 1
+ggplot(iris[, c(ind,5)], 
+       aes(x=Sepal.Length, fill=Species)) +
+    geom_histogram(stat = "bin", bins = 30) +
+    xlab('# of bins')
+```
+
+## Linear Model
+
+I also created a linear model with shiny app with the ability to change the predictor and outcome variables.
+
+```{r lm1, warning = F, message = F, echo=F}
+data <- iris[, c(1,2,5)]
+colnames(data) <- c("x","y","c")
+model1 <- lm(y ~ x, data=data)
+
+p <- data %>% ggplot(aes(x = x, 
+                            y = y,
+                            col = c)) + 
+    geom_point() +
+    theme(legend.title = element_blank())
+
+model2lines <- predict(model1, newdata = data.frame(x = 0:10))
+output_df <- data.frame(x = 0:10,
+                        y = model2lines,
+                        c = 'linear model')
+p <- p + geom_line(data = output_df, aes(x = x, y = y, col = c))
+p
+```
+
+
+## K-means Clustering
+
+Lastly, I examined the k-means clustering model with shiny app, with the ability to let user to select the number of clusters.
+
+```{r cluster, warning = F, message = F, echo=F}
+data <- iris[,c(1,2)]
+set.seed(123)
+model3 <- kmeans(data, 3, nstart = 25)
+fviz_cluster(model3, geom = "point", data = data)
+```
+

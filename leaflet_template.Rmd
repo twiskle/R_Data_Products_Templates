@@ -1,0 +1,64 @@
+---
+title: "California Wildfires 2020"
+author: "Powell Chu"
+date: "1/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Wildfires in California that burned over 100,000 Acres in year 2020.
+
+```{r wildfire, warning = F, echo = F}
+
+# List of California wildfires that burned over 100,000 Acres in year 2020
+Name <- c('August Complex', 'SCU Lightning Complex', 'Creek', 'LNU Lightning Complex', 
+          'North Complex', 'SQF Lightning Complex', 'Slater / Devil', 'Red Salmon Complex',
+          'Dolan', 'Bobcat')
+lat <- c(39.765, 37.439437, 37.19147, 38.700104, 
+         39.85, 36.255, 41.766, 41.185, 
+         36.123, 34.241)
+lng <- c(-122.673, -121.30435, -119.261175, -122.469362, 
+         -120.96, -118.497, -123.375, -123.433,
+         -121.602, -117.868)
+acres <-c(1032648, 396624, 379895, 363220, 
+          318935, 174178, 166127, 144698, 
+          124924, 115997)
+links <- c("<a href='https://en.wikipedia.org/wiki/August_Complex_fire'>August Complex</a>",
+           "<a href='https://en.wikipedia.org/wiki/SCU_Lightning_Complex_fires'>SCU Lightning Complex</a>",
+           "<a href='https://en.wikipedia.org/wiki/Creek_Fire_(2020)'>Creek</a>",
+           "<a href='https://en.wikipedia.org/wiki/LNU_Lightning_Complex_fires'>LNU Lightning Complex</a>",
+           "<a href='https://en.wikipedia.org/wiki/North_Complex_fire'>North Complex</a>",
+           "<a href='https://en.wikipedia.org/wiki/SQF_Lightning_Complex_fires'>SQF Lightning Complex</a>",
+           "<a href='https://en.wikipedia.org/wiki/Slater_and_Devil_fires'>Slater / Devil</a>",
+           "<a href='https://en.wikipedia.org/wiki/Red_Salmon_Complex_fire'>Red Salmon Complex</a>",
+           "<a href='https://en.wikipedia.org/wiki/Dolan_Fire'>Dolan</a>",
+           "<a href='https://en.wikipedia.org/wiki/Bobcat_Fire'>Bobcat</a>")
+
+df <- data.frame(Name = Name,
+                 lat = lat,
+                 lng = lng,
+                 acres = acres,
+                 links = links)
+
+library(leaflet)
+# custom markers, separate popups for each marker
+fireIcon <- makeIcon(
+  iconUrl = "https://i.pinimg.com/originals/44/4d/fe/444dfe4803df7c60219454289f425797.png",
+  iconWidth = 15*105/115, iconHeight = 15,
+  iconAnchorX = 15*105/115/2, iconAnchorY = 8
+)
+
+df %>% leaflet() %>%
+  addTiles() %>%
+  addMarkers(lng = lng, lat = lat,
+             icon = fireIcon,
+             popup = links) %>%
+  addCircles(lng = lng, lat = lat,
+             weight = 1, color = '#F91A1A',
+             radius = sqrt(df$acres)*50)
+```
+
